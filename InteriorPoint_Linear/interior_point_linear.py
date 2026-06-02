@@ -39,7 +39,7 @@ def starting_point(A, b, c):
     return x, lam, mu
 
 # Use this linear program generator to test your interior point method.
-def random_lp(j,k):
+def random_lp(j, k):
     """Generate a linear program min c^T x s.t. Ax = b, x>=0.
     First generate m feasible constraints, then add
     slack variables to convert it into the above form.

@@ -34,7 +34,7 @@ P[3][3] = [(0, 0, 1, True)]
 
 
 # Problem 1
-def value_iteration(P, nS ,nA, beta=1.0, tol=1e-8, maxiter=3000):
+def value_iteration(P, nS, nA, beta=1.0, tol=1e-8, maxiter=3000):
     """Perform Value Iteration according to the Bellman optimality principle and iterative policy evaluation.
 
     Parameters:
@@ -103,7 +103,7 @@ def policy_iteration(P, nS, nA, beta=1.0, tol=1e-8, maxiter=200):
         maxiter (int): The maximum number of iterations to run policy iteration for
 
     Returns:
-    	V (ndarray): An array V approximating the true optimal value function.
+        V (ndarray): An array V approximating the true optimal value function.
         policy (ndarray): An array representing the optimal deterministic policy
         n (int): number of iterations that were needed for policy iteration to converge
     """

@@ -73,8 +73,8 @@ def backtracking(f, Df, x, p, alpha=1, rho=.9, c=1e-4):
     Parameters:
         f (function): A function f:R^n->R.
         Df (function): The first derivative (gradient) of f.
-        x (float): The current approximation to the minimizer.
-        p (float): The current search direction.
+        x (ndarray): The current approximation to the minimizer.
+        p (ndarray): The current search direction.
         alpha (float): A large initial step length.
         rho (float): Parameter in (0, 1).
         c (float): Parameter in (0, 1).
