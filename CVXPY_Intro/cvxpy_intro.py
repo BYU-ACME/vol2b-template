@@ -34,8 +34,8 @@ def l1Min(A, b):
         subject to  Ax = b
 
     Parameters:
-        A ((m,n) ndarray)
-        b ((m, ) ndarray)
+        A ((m, n) ndarray)
+        b ((m,) ndarray)
 
     Returns:
         The optimizer x (ndarray)
@@ -60,7 +60,7 @@ def prob3():
 def prob4():
     """Find the minimizer and minimum of
 
-    g(x,y,z) = (3/2)x^2 + 2xy + xz + 2y^2 + 2yz + (3/2)z^2 + 3x + z
+    g(x, y, z) = (3/2)x^2 + 2xy + xz + 2y^2 + 2yz + (3/2)z^2 + 3x + z
 
     Returns (in order):
         The optimizer x (ndarray)
@@ -76,8 +76,8 @@ def prob5(A, b):
         subject to  ||x||_1 == 1
                     x >= 0
     Parameters:
-        A ((m,n), ndarray)
-        b ((m,), ndarray)
+        A ((m, n) ndarray)
+        b ((m,) ndarray)
         
     Returns (in order):
         The optimizer x (ndarray)

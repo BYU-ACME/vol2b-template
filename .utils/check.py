@@ -8,6 +8,7 @@ import importlib
 import json
 import os
 import re
+import shutil
 import socket
 import subprocess
 import sys
@@ -88,6 +89,42 @@ def _run(cmd: list[str], *, cwd: Path | None = None, timeout: int = 30) -> subpr
         text=True,
         timeout=timeout,
     )
+
+
+def _local_bin() -> Path:
+    return Path.home() / ".local" / "bin"
+
+
+def _which_with_local_bin(name: str) -> str | None:
+    """Resolve a command without relying on login-shell PATH (profile.d may reset it)."""
+    local = _local_bin() / name
+    if local.is_file() and os.access(local, os.X_OK):
+        return str(local)
+    path = os.environ.get("PATH", "")
+    augmented = f"{_local_bin()}{os.pathsep}{path}" if path else str(_local_bin())
+    return shutil.which(name, path=augmented)
+
+
+def _find_code_cli() -> str | None:
+    """Find VS Code / Cursor remote CLI even when PATH was clobbered."""
+    for name in ("code", "cursor"):
+        found = shutil.which(name)
+        if found:
+            return found
+
+    hits: list[Path] = []
+    for base in (
+        Path.home() / ".cursor-server" / "bin",
+        Path.home() / ".vscode-server" / "bin",
+        Path("/vscode/vscode-server/bin"),
+    ):
+        if base.is_dir():
+            hits.extend(p for p in base.glob("*/bin/remote-cli/code") if p.is_file())
+
+    if not hits:
+        return None
+    hits.sort(key=lambda p: p.stat().st_mtime, reverse=True)
+    return str(hits[0])
 
 
 def _has_network(host: str = "github.com", port: int = 443, timeout: float = 3.0) -> bool:
@@ -184,15 +221,30 @@ def _check_kernel(results: list[CheckResult], config: dict) -> None:
 
 def _check_lint(results: list[CheckResult]) -> None:
     section = "docker"
-    lint_path = _run(["bash", "-lc", "command -v lint"])
-    if lint_path.returncode == 0 and lint_path.stdout.strip():
-        _add(results, section, "lint command", Status.PASS, lint_path.stdout.strip())
-    else:
+    acme_path = _which_with_local_bin("acme")
+    lint_path = _which_with_local_bin("lint")
+    repo_acme = UTILS_DIR / "acme"
+
+    if acme_path:
+        detail = acme_path
+        if lint_path:
+            detail += f" (lint: {lint_path})"
+        _add(results, section, "acme command", Status.PASS, detail)
+        return
+
+    if repo_acme.is_file() and os.access(repo_acme, os.X_OK):
         _add(
-            results, section, "lint command", Status.WARN,
-            "lint not found on PATH",
-            "Rebuild or restart the dev container, or run: bash .utils/install_completions.sh",
+            results, section, "acme command", Status.WARN,
+            f"Found {repo_acme}, but not installed to ~/.local/bin",
+            "Run: bash .utils/install_completions.sh",
         )
+        return
+
+    _add(
+        results, section, "acme command", Status.WARN,
+        "acme not found",
+        "Rebuild or restart the dev container, or run: bash .utils/install_completions.sh",
+    )
 
 
 def _check_data_record(results: list[CheckResult], config: dict) -> None:
@@ -241,8 +293,8 @@ def _check_vscode(results: list[CheckResult], config: dict) -> None:
         _add(results, section, "VS Code extensions", Status.SKIP, "No extension checks configured")
         return
 
-    proc = _run(["bash", "-lc", "command -v code >/dev/null && code --list-extensions"])
-    if proc.returncode != 0:
+    code_cli = _find_code_cli()
+    if not code_cli:
         _add(
             results, section, "VS Code CLI", Status.WARN,
             "Could not list extensions (code CLI unavailable)",
@@ -250,7 +302,21 @@ def _check_vscode(results: list[CheckResult], config: dict) -> None:
         )
         return
 
-    installed = {line.strip().lower() for line in proc.stdout.splitlines() if line.strip()}
+    proc = _run([code_cli, "--list-extensions"])
+    if proc.returncode != 0:
+        detail = (proc.stderr or proc.stdout or "code --list-extensions failed").strip()
+        _add(
+            results, section, "VS Code CLI", Status.WARN,
+            detail.splitlines()[0] if detail else "code --list-extensions failed",
+            "If notebooks fail to open, reopen in container and install the Jupyter extension manually",
+        )
+        return
+
+    installed = {
+        line.strip().lower()
+        for line in proc.stdout.splitlines()
+        if line.strip() and "." in line.strip() and " " not in line.strip()
+    }
     for ext_id, meta in extensions.items():
         label = meta.get("label", ext_id)
         if ext_id.lower() in installed:

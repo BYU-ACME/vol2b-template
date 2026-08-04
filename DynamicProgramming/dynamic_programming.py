@@ -47,7 +47,7 @@ def get_consumption(N, u=lambda x: np.sqrt(x)):
         u (function): Utility function.
 
     Returns:
-        C ((N+1,N+1) ndarray): The consumption matrix.
+        C ((N+1, N+1) ndarray): The consumption matrix.
     """
     raise NotImplementedError("Problem 3 Incomplete")
 
@@ -64,9 +64,9 @@ def eat_cake(T, N, B, u=lambda x: np.sqrt(x)):
         u (function): Utility function.
 
     Returns:
-        A ((N+1,T+1) ndarray): The matrix where the (ij)th entry is the
+        A ((N+1, T+1) ndarray): The matrix where the (ij)th entry is the
             value of having w_i cake at time j.
-        P ((N+1,T+1) ndarray): The matrix where the (ij)th entry is the
+        P ((N+1, T+1) ndarray): The matrix where the (ij)th entry is the
             number of pieces to consume given i pieces at time j.
     """
     raise NotImplementedError("Problems 4-6 Incomplete")

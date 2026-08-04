@@ -75,7 +75,7 @@ class Barycentric:
 # Problem 5
 def prob5():
     """For n = 2^2, 2^3, ..., 2^8, calculate the error of intepolating Runge's
-    function on [-1,1] with n points using SciPy's BarycentricInterpolator
+    function on [-1, 1] with n points using SciPy's BarycentricInterpolator
     class, once with equally spaced points and once with the Chebyshev
     extremal points. Plot the absolute error of the interpolation with each
     method on a log-log plot.

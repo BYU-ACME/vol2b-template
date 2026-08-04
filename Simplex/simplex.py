@@ -22,7 +22,7 @@ class SimplexSolver(object):
 
         Parameters:
             c ((n,) ndarray): The coefficients of the objective function.
-            A ((m,n) ndarray): The constraint coefficients matrix.
+            A ((m, n) ndarray): The constraint coefficients matrix.
             b ((m,) ndarray): The constraint vector.
 
         Raises:
@@ -36,7 +36,7 @@ class SimplexSolver(object):
 
         Parameters:
             c ((n,) ndarray): The coefficients of the objective function.
-            A ((m,n) ndarray): The constraint coefficients matrix.
+            A ((m, n) ndarray): The constraint coefficients matrix.
             b ((m,) ndarray): The constraint vector.
         """
         raise NotImplementedError("Problem 2 Incomplete")

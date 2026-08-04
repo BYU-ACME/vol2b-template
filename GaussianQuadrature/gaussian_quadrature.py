@@ -46,12 +46,12 @@ class GaussianQuadrature:
 
     # Problem 3
     def basic(self, f):
-        """Approximate the integral of a f on the interval [-1,1]."""
+        """Approximate the integral of a f on the interval [-1, 1]."""
         raise NotImplementedError("Problem 3 Incomplete")
 
     # Problem 4
     def integrate(self, f, a, b):
-        """Approximate the integral of a function on the interval [a,b].
+        """Approximate the integral of a function on the interval [a, b].
 
         Parameters:
             f (function): Callable function to integrate.
@@ -66,7 +66,7 @@ class GaussianQuadrature:
     # Problem 6.
     def integrate2d(self, f, a1, b1, a2, b2):
         """Approximate the integral of the two-dimensional function f on
-        the interval [a1,b1]x[a2,b2].
+        the interval [a1, b1]x[a2, b2].
 
         Parameters:
             f (function): A function to integrate that takes two parameters.
@@ -94,6 +94,6 @@ def prob5():
            error of the approximation.
     Plot the errors against the number of points and weights n, using a log
     scale for the y-axis. Finally, plot a horizontal line showing the error of
-    scipy.integrate.quad() (which doesn’t depend on n).
+    scipy.integrate.quad() (which doesn't depend on n).
     """
     raise NotImplementedError("Problem 5 Incomplete")
