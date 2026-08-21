@@ -104,7 +104,4 @@ echo "Open a new terminal, then try:"
 echo "  acme check"
 echo "  acme lint path/to/file.py"
 echo "  acme download_data"
-
-if [[ -t 0 ]]; then
-  exec bash
-fi
+ok 

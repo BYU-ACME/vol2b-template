@@ -15,7 +15,7 @@ REPO_ROOT = UTILS_DIR.parent
 # Injected at publish time when using public data repositories.
 # DATA_VERSION matches byu.yml docker_image_tag (a branch name on the data repo).
 DATA_REPO = 'https://github.com/BYU-ACME/vol2b-data.git'
-DATA_VERSION = 'jun2026'
+DATA_VERSION = 'aug2026'
 
 # Publish-only stamp in public data repos (see repo_urls.DATA_VERSION_FILENAME).
 _DATA_VERSION_STAMP = "ACME_DATA_VERSION"
